@@ -72,19 +72,19 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 
 	<script>
-var count = 0;        function addTransactionLog(data) {
+        function addTransactionLog(data) {
             $('#access .logs').prepend(
-			    "<p>Transaction " + data.id + " Cost : " + count++ + " coins" + "</p>"
+			    "<p>Transaction " + data.id + " Cost : " + data.coins + " coins" + "</p>"
 			);
         }
         function addSensorsLog(data) {
             $('#sensor .logs').prepend(
-			    "<p>Transaction " + data.id + " Speed : " + count++ + " km/h" + "</p>"
+			    "<p>Transaction " + data.id + " Speed : " + data.speed + " km/h " + "GPS : " + data.gps + "</p>"
 			);
         }
         function addAccessLog(data) {
             $('#payment .logs').prepend(
-			    "<p >Transaction " + data.id +" Token : " + count++ + "" + "</p>"
+			    "<p >Transaction " + data.id +" Token : " + data.token + " " + data.action + " + "</p>"
 			);
         }
     </script>
