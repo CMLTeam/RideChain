@@ -1,147 +1,182 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Animated route</title>
-	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-	<meta charset="utf-8">
-	<style>
-		html, body, #map {
-		    font-family: sans-serif;
-			height: 100%;
-			margin: 0px;
-			padding: 0px
-		}
-		body {
-		    width: 100%;
-		    content: "";
+    <title>Animated route</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+        html, body, #map {
+            font-family: sans-serif;
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+
+        body {
+            width: 100%;
+            content: "";
             display: table;
             clear: both;
-		}
-		.column {
-		    height: 100%;
-		    float: left;
-		}
-		.left {
-		    width: 60%;
-		}
+        }
+
+        .column {
+            height: 100%;
+            float: left;
+        }
+
+        .left {
+            width: 60%;
+        }
+
         .right {
-		    width: 40%;
-		}
-		#blockchain-log div {
-		    height: 33%;
-		}
-		#blockchain-log .header {
-		    padding: 5px;
+            width: 40%;
+        }
+
+        #blockchain-log div {
+            height: 33%;
+        }
+
+        #blockchain-log .header {
+            padding: 5px;
             background-color: cadetblue;
             font-size: 20px;
             height: 20px;
-		}
-	</style>
+        }
+    </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=geometry&amp;key=AIzaSyCllNB49Wtg3V9KnNKBf-Xi0Ka9uXGwJmc"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 
-	<script>
+    <script>
         function addTransaction(data) {
             var trans;
             $('#payment .log').append(
-			    $("<p id = "+objValue+" class=''>Trans</p>")
-			);
+                $("<p id = " + objValue + " class=''>Trans</p>")
+            );
         }
     </script>
-	<script>
-		function initialize() {
-			var map = new google.maps.Map(document.getElementById("map"), {
-			  center: {lat: 51.5087531, lng: -0.1281153},
-			  // zoom: 7,
-			  zoom: 9,
-			  // zoom: 14,
-			  mapTypeId: google.maps.MapTypeId.ROADMAP
-			  // mapTypeId: google.maps.MapTypeId.TERRAIN
-			});
+    <script>
+        function getDeg(lat1, lon1, lat2, lon2) {
+            var lat1 = lat1 * Math.PI / 180;
+            var lat2 = lat2 * Math.PI / 180;
+            var dLon = (lon2 - lon1) * Math.PI / 180;
 
-			getDirections(map);
-		}
+            var y = Math.sin(dLon) * Math.cos(lat2);
+            var x = Math.cos(lat1) * Math.sin(lat2) -
+                Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
 
-		var jjj=0;
-		function moveMarker(map, marker, latlng) {
-			marker.setPosition(latlng);
-			if (jjj++ % 10 === 0)
-			    map.panTo(latlng);
-		}
+            var brng = Math.atan2(y, x);
 
-		function autoRefresh(map, pathCoords) {
-			var i, route, marker;
+            return (((brng * 180 / Math.PI) + 360) % 360);
+        }
 
-			route = new google.maps.Polyline({
-				path: [],
-				geodesic : true,
-				strokeColor: '#FF0000',
-				strokeOpacity: 1.0,
-				// strokeOpacity: 0,
-				strokeWeight: 2,
-				editable: false,
-				map:map
-			});
+        function initialize() {
+            var map = new google.maps.Map(document.getElementById("map"), {
+                center: {lat: 51.5087531, lng: -0.1281153},
+                // zoom: 7,
+                // zoom: 12,
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+                // mapTypeId: google.maps.MapTypeId.TERRAIN
+            });
 
-			// marker=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
-			marker=new google.maps.Marker({map:map, icon: {
-                    url: 'car.png',
+            getDirections(map);
+        }
+
+        var jjj = 0;
+
+        function moveMarker(map, marker, latlng) {
+            marker.setPosition(latlng);
+            if (jjj++ % 20 === 0)
+                map.panTo(latlng);
+        }
+
+        var prevP;
+
+        function autoRefresh(map, pathCoords) {
+            var i, route, marker;
+
+            route = new google.maps.Polyline({
+                path: [],
+                geodesic: true,
+                strokeColor: '#FF0000',
+                // strokeOpacity: 1.0,
+                strokeOpacity: 0.6,
+                // strokeOpacity: 0,
+                strokeWeight: 2,
+                editable: false,
+                map: map
+            });
+
+            var ICON = 'car2.png';
+            // marker=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
+            marker = new google.maps.Marker({
+                map: map, icon: {
+                    url: ICON,
                     // This marker is 20 pixels wide by 32 pixels high.
-                    scaledSize: new google.maps.Size(32, 22),
+                    scaledSize: new google.maps.Size(34, 34),
                     // The origin for this image is (0, 0).
                     // origin: new google.maps.Point(0, 0),
                     // The anchor for this image is the base of the flagpole at (0, 32).
-                    anchor: new google.maps.Point(16, 11),
-                    rotation: 30
-                }});
+                    anchor: new google.maps.Point(17, 17)
+                }
+            });
 
-			for (i = 0; i < pathCoords.length; i++) {
-				setTimeout(function(coords) {
-					route.getPath().push(coords);
-					moveMarker(map, marker, coords);
-				}, 200 * i, pathCoords[i]);
-			}
-		}
+            for (i = 0; i < pathCoords.length; i++) {
+                setTimeout(function (coords) {
+                    var $img = $('div>img[src="' + ICON + '"]:visible');
+                    // console.info($img[0])
+                    if (prevP) {
+                        var deg = getDeg(prevP.lat(), prevP.lng(), coords.lat(), coords.lng());
+                        console.info(111, coords, deg)
+                        $img.css('transform', 'rotate(' + (deg - 90) + 'deg)')
+                    }
+                    prevP = coords;
+                    route.getPath().push(coords);
+                    moveMarker(map, marker, coords);
+                }, 200 * i, pathCoords[i]);
+            }
+        }
 
-		function getDirections(map) {
-			var directionsService = new google.maps.DirectionsService();
+        function getDirections(map) {
+            var directionsService = new google.maps.DirectionsService();
 
-			var start = new google.maps.LatLng(51.5087531, -0.1281153);
-			var end = new google.maps.LatLng(48.8583694, 2.2944796);
+            // var start = new google.maps.LatLng(51.5087531, -0.1281153);
+            // var end = new google.maps.LatLng(48.8583694, 2.2944796);
 
-			// var start = new google.maps.LatLng(44.1081174,3.026852);
-			// var end = new google.maps.LatLng(44.0338211,3.0648389);
+            var start = new google.maps.LatLng(44.134150, 3.025150);
+            var end = new google.maps.LatLng(44.062912, 3.026836);
 
-			var request = {
-				origin:start,
-				destination:end,
-				travelMode: google.maps.TravelMode.DRIVING
-			};
-			directionsService.route(request, function(result, status) {
-				if (status === google.maps.DirectionsStatus.OK) {
-					autoRefresh(map, result.routes[0].overview_path);
-				}
-			});
-		}
+            var request = {
+                origin: start,
+                destination: end,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+            directionsService.route(request, function (result, status) {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    console.info(111, result.routes[0])
+                    autoRefresh(map, result.routes[0].overview_path);
+                }
+            });
+        }
 
-		google.maps.event.addDomListener(window, 'load', initialize);
-	</script>
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
 </head>
 <body>
-	<div id="map" class="column left"></div>
-	<div id="blockchain-log" class="column right">
-        <div id="access">
-            <div class="header">Blockchain Access Transactions</div>
-            <div class="logs"></div>
-        </div>
-        <div id="sensors">
-            <div class="header">Blockchain Sensor Logging</div>
-            <div class="logs"></div>
-        </div>
-        <div id="payment">
-            <div class="header">Blockchain Payments</div>
-            <div class="logs"></div>
-        </div>
+<div id="map" class="column left"></div>
+<div id="blockchain-log" class="column right">
+    <div id="access">
+        <div class="header">Blockchain Access Transactions</div>
+        <div class="logs"></div>
     </div>
+    <div id="sensors">
+        <div class="header">Blockchain Sensor Logging</div>
+        <div class="logs"></div>
+    </div>
+    <div id="payment">
+        <div class="header">Blockchain Payments</div>
+        <div class="logs"></div>
+    </div>
+</div>
 </body>
 </html>
