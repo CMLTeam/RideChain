@@ -17,16 +17,21 @@
 		function initialize() {
 			var map = new google.maps.Map(document.getElementById("map"), {
 			  center: {lat: 51.5087531, lng: -0.1281153},
-			  zoom: 7,
+			  // zoom: 7,
+			  zoom: 9,
+			  // zoom: 14,
 			  mapTypeId: google.maps.MapTypeId.ROADMAP
+			  // mapTypeId: google.maps.MapTypeId.TERRAIN
 			});
 
 			getDirections(map);
 		}
 
+		var jjj=0;
 		function moveMarker(map, marker, latlng) {
 			marker.setPosition(latlng);
-			map.panTo(latlng);
+			if (jjj++ % 10 === 0)
+			    map.panTo(latlng);
 		}
 
 		function autoRefresh(map, pathCoords) {
@@ -51,7 +56,8 @@
                     // The origin for this image is (0, 0).
                     // origin: new google.maps.Point(0, 0),
                     // The anchor for this image is the base of the flagpole at (0, 32).
-                    anchor: new google.maps.Point(16, 11)
+                    anchor: new google.maps.Point(16, 11),
+                    rotation: 30
                 }});
 
 			for (i = 0; i < pathCoords.length; i++) {
@@ -67,6 +73,9 @@
 
 			var start = new google.maps.LatLng(51.5087531, -0.1281153);
 			var end = new google.maps.LatLng(48.8583694, 2.2944796);
+
+			// var start = new google.maps.LatLng(44.1081174,3.026852);
+			// var end = new google.maps.LatLng(44.0338211,3.0648389);
 
 			var request = {
 				origin:start,
