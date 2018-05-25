@@ -74,7 +74,7 @@
                 center: {lat: 51.5087531, lng: -0.1281153},
                 // zoom: 7,
                 // zoom: 12,
-                zoom: 13,
+                zoom: 14,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
                 // mapTypeId: google.maps.MapTypeId.TERRAIN
             });
@@ -98,31 +98,42 @@
             route = new google.maps.Polyline({
                 path: [],
                 geodesic: true,
-                strokeColor: '#FF0000',
+                strokeColor: '#00AA00',
                 // strokeOpacity: 1.0,
                 strokeOpacity: 0.6,
                 // strokeOpacity: 0,
-                strokeWeight: 2,
+                strokeWeight: 5,
                 editable: false,
                 map: map
             });
 
             var ICON = 'car2.png';
-            // marker=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
             marker = new google.maps.Marker({
                 map: map, icon: {
                     url: ICON,
                     // This marker is 20 pixels wide by 32 pixels high.
-                    scaledSize: new google.maps.Size(34, 34),
+                    scaledSize: new google.maps.Size(42, 42),
                     // The origin for this image is (0, 0).
                     // origin: new google.maps.Point(0, 0),
                     // The anchor for this image is the base of the flagpole at (0, 32).
-                    anchor: new google.maps.Point(17, 17)
+                    anchor: new google.maps.Point(21, 21)
                 }
             });
 
+            // var marker1=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
+            var payMarker = new google.maps.Marker({
+                map: map, icon: {
+                    url: "bank_map_pointer-512.png",
+                    scaledSize: new google.maps.Size(34, 34)
+                }
+            });
+
+            // payMarker.setPosition(new google.maps.LatLng(44.134150, 3.025150));
+            payMarker.setPosition(new google.maps.LatLng(44.10112, 3.0228900000000003));
+
             for (i = 0; i < pathCoords.length; i++) {
                 setTimeout(function (coords) {
+                    console.info(222,coords.lat(),coords.lng())
                     var $img = $('div>img[src="' + ICON + '"]:visible');
                     // console.info($img[0])
                     if (prevP) {
@@ -143,7 +154,10 @@
             // var start = new google.maps.LatLng(51.5087531, -0.1281153);
             // var end = new google.maps.LatLng(48.8583694, 2.2944796);
 
-            var start = new google.maps.LatLng(44.134150, 3.025150);
+            // var start = new google.maps.LatLng(44.134150, 3.025150);
+            // var end = new google.maps.LatLng(44.062912, 3.026836);
+
+            var start = new google.maps.LatLng(44.142829, 3.017506);
             var end = new google.maps.LatLng(44.062912, 3.026836);
 
             var request = {
