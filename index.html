@@ -6,14 +6,49 @@
 	<meta charset="utf-8">
 	<style>
 		html, body, #map {
+		    font-family: sans-serif;
 			height: 100%;
 			margin: 0px;
 			padding: 0px
 		}
+		body {
+		    width: 100%;
+		    content: "";
+            display: table;
+            clear: both;
+		}
+		.column {
+		    height: 100%;
+		    float: left;
+		}
+		.left {
+		    width: 60%;
+		}
+        .right {
+		    width: 40%;
+		}
+		#blockchain-log div {
+		    height: 33%;
+		}
+		#blockchain-log .header {
+		    padding: 5px;
+            background-color: cadetblue;
+            font-size: 20px;
+            height: 20px;
+		}
 	</style>
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=geometry&amp;key=AIzaSyCllNB49Wtg3V9KnNKBf-Xi0Ka9uXGwJmc"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=geometry"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-    <script>
+
+	<script>
+        function addTransaction(data) {
+            var trans;
+            $('#payment .log').append(
+			    $("<p id = "+objValue+" class=''>Trans</p>")
+			);
+        }
+    </script>
+	<script>
 		function initialize() {
 			var map = new google.maps.Map(document.getElementById("map"), {
 			  center: {lat: 51.5087531, lng: -0.1281153},
@@ -93,6 +128,20 @@
 	</script>
 </head>
 <body>
-	<div id="map"></div>
+	<div id="map" class="column left"></div>
+	<div id="blockchain-log" class="column right">
+        <div id="access">
+            <div class="header">Blockchain Access Transactions</div>
+            <div class="logs"></div>
+        </div>
+        <div id="sensors">
+            <div class="header">Blockchain Sensor Logging</div>
+            <div class="logs"></div>
+        </div>
+        <div id="payment">
+            <div class="header">Blockchain Payments</div>
+            <div class="logs"></div>
+        </div>
+    </div>
 </body>
 </html>
