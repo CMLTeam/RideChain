@@ -36,12 +36,22 @@
 				geodesic : true,
 				strokeColor: '#FF0000',
 				strokeOpacity: 1.0,
+				// strokeOpacity: 0,
 				strokeWeight: 2,
 				editable: false,
 				map:map
 			});
 
-			marker=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
+			// marker=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
+			marker=new google.maps.Marker({map:map, icon: {
+                    url: 'car.png',
+                    // This marker is 20 pixels wide by 32 pixels high.
+                    scaledSize: new google.maps.Size(32, 22),
+                    // The origin for this image is (0, 0).
+                    // origin: new google.maps.Point(0, 0),
+                    // The anchor for this image is the base of the flagpole at (0, 32).
+                    anchor: new google.maps.Point(16, 11)
+                }});
 
 			for (i = 0; i < pathCoords.length; i++) {
 				setTimeout(function(coords) {
@@ -63,7 +73,7 @@
 				travelMode: google.maps.TravelMode.DRIVING
 			};
 			directionsService.route(request, function(result, status) {
-				if (status == google.maps.DirectionsStatus.OK) {
+				if (status === google.maps.DirectionsStatus.OK) {
 					autoRefresh(map, result.routes[0].overview_path);
 				}
 			});
