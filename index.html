@@ -42,16 +42,50 @@
             font-size: 20px;
             height: 20px;
         }
+		#blockchain-log .logs {
+            padding: 5px;
+		    max-height:80%;
+		    height:80%;
+		    overflow: scroll;
+		}
+		.controls{
+		    position: absolute;
+		    top:0;
+		    left: 200px;
+		    z-index: 999;
+		}
+		.controls button{
+            margin: 10px;
+            padding: 7px;
+        }
+		button.start{
+		    color: green;
+		}
+		button.pause{
+		    color: orange;
+		}
+		button.reset{
+		    color: darkred;
+		}
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=geometry&amp;key=AIzaSyCllNB49Wtg3V9KnNKBf-Xi0Ka9uXGwJmc"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 
-    <script>
-        function addTransaction(data) {
-            var trans;
-            $('#payment .log').append(
-                $("<p id = " + objValue + " class=''>Trans</p>")
-            );
+	<script>
+var count = 0;        function addTransactionLog(data) {
+            $('#access .logs').prepend(
+			    "<p>Transaction " + data.id + " Cost : " + count++ + " coins" + "</p>"
+			);
+        }
+        function addSensorsLog(data) {
+            $('#sensor .logs').prepend(
+			    "<p>Transaction " + data.id + " Speed : " + count++ + " km/h" + "</p>"
+			);
+        }
+        function addAccessLog(data) {
+            $('#payment .logs').prepend(
+			    "<p >Transaction " + data.id +" Token : " + count++ + "" + "</p>"
+			);
         }
     </script>
     <script>
@@ -163,20 +197,26 @@
     </script>
 </head>
 <body>
-<div id="map" class="column left"></div>
-<div id="blockchain-log" class="column right">
-    <div id="access">
-        <div class="header">Blockchain Access Transactions</div>
-        <div class="logs"></div>
+	<div class="controls">
+        <button class="start" onclick="addTransactionLog({id: 123 })">Start</button>
+        <button class="pause" onclick="addSensorsLog({id: 123 })">Pause</button>
+        <button class="reset" onclick="addAccessLog({id: 123 })">Reset</button>
     </div>
-    <div id="sensors">
-        <div class="header">Blockchain Sensor Logging</div>
-        <div class="logs"></div>
+
+	<div id="map" class="column left"></div>
+	<div id="blockchain-log" class="column right">
+        <div id="access">
+            <div class="header">Blockchain Access Transactions</div>
+            <div class="logs"></div>
+        </div>
+        <div id="sensor">
+            <div class="header">Blockchain Sensors Logging</div>
+            <div class="logs"></div>
+        </div>
+        <div id="payment">
+            <div class="header">Blockchain Payments</div>
+            <div class="logs"></div>
+        </div>
     </div>
-    <div id="payment">
-        <div class="header">Blockchain Payments</div>
-        <div class="logs"></div>
-    </div>
-</div>
 </body>
 </html>
