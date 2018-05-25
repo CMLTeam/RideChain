@@ -102,16 +102,30 @@ var count = 0;        function addTransactionLog(data) {
 
             return (((brng * 180 / Math.PI) + 360) % 360);
         }
-
+        var SIZE = 60;
         function initialize() {
             var map = new google.maps.Map(document.getElementById("map"), {
                 center: {lat: 51.5087531, lng: -0.1281153},
                 // zoom: 7,
                 // zoom: 12,
-                zoom: 14,
+                zoom: 13,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
                 // mapTypeId: google.maps.MapTypeId.TERRAIN
             });
+
+            // var marker1=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
+            var payMarker = new google.maps.Marker({
+                map: map, icon: {
+                    url: "bank_map_pointer-512.png",
+                    scaledSize: new google.maps.Size(SIZE, SIZE)
+                }
+            });
+
+            // payMarker.setPosition(new google.maps.LatLng(44.134150, 3.025150));
+            var payPosition = new google.maps.LatLng(44.10112, 3.0228900000000003);
+            payMarker.setPosition(payPosition);
+
+            map.panTo(payPosition);
 
             getDirections(map);
         }
@@ -120,8 +134,8 @@ var count = 0;        function addTransactionLog(data) {
 
         function moveMarker(map, marker, latlng) {
             marker.setPosition(latlng);
-            if (jjj++ % 20 === 0)
-                map.panTo(latlng);
+            // if (jjj++ % 20 === 0)
+            //     map.panTo(latlng);
         }
 
         var prevP;
@@ -136,7 +150,7 @@ var count = 0;        function addTransactionLog(data) {
                 // strokeOpacity: 1.0,
                 strokeOpacity: 0.6,
                 // strokeOpacity: 0,
-                strokeWeight: 5,
+                strokeWeight: 10,
                 editable: false,
                 map: map
             });
@@ -146,24 +160,13 @@ var count = 0;        function addTransactionLog(data) {
                 map: map, icon: {
                     url: ICON,
                     // This marker is 20 pixels wide by 32 pixels high.
-                    scaledSize: new google.maps.Size(42, 42),
+                    scaledSize: new google.maps.Size(SIZE, SIZE),
                     // The origin for this image is (0, 0).
                     // origin: new google.maps.Point(0, 0),
                     // The anchor for this image is the base of the flagpole at (0, 32).
-                    anchor: new google.maps.Point(21, 21)
+                    anchor: new google.maps.Point(SIZE/2, SIZE/2)
                 }
             });
-
-            // var marker1=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
-            var payMarker = new google.maps.Marker({
-                map: map, icon: {
-                    url: "bank_map_pointer-512.png",
-                    scaledSize: new google.maps.Size(34, 34)
-                }
-            });
-
-            // payMarker.setPosition(new google.maps.LatLng(44.134150, 3.025150));
-            payMarker.setPosition(new google.maps.LatLng(44.10112, 3.0228900000000003));
 
             for (i = 0; i < pathCoords.length; i++) {
                 setTimeout(function (coords) {
@@ -188,10 +191,10 @@ var count = 0;        function addTransactionLog(data) {
             // var start = new google.maps.LatLng(51.5087531, -0.1281153);
             // var end = new google.maps.LatLng(48.8583694, 2.2944796);
 
-            // var start = new google.maps.LatLng(44.134150, 3.025150);
+            var start = new google.maps.LatLng(44.134150, 3.025150);
             // var end = new google.maps.LatLng(44.062912, 3.026836);
 
-            var start = new google.maps.LatLng(44.142829, 3.017506);
+            // var start = new google.maps.LatLng(44.142829, 3.017506);
             var end = new google.maps.LatLng(44.062912, 3.026836);
 
             var request = {
