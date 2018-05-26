@@ -354,16 +354,13 @@
                         });
                         var startMan2 = new google.maps.LatLng(44.06386, 3.03031);
                         man2Marker.setPosition(startMan2);
+                        var result;
+                        //result = accessContract.removeOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11');
+                        // addAccessLog({id:result.id, access: result?"Access Revoked":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
+                        addAccessLog({id:uuid(), action: "Access Revoked", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
                     }
                 }, 260 * i, i);
             }
-
-            setTimeout(function (coords) {
-                var result;
-                //result = accessContract.removeOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11');
-                // addAccessLog({id:result.id, access: result?"Access Revoked":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
-                addAccessLog({id:uuid(), action: "Access Revoked", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
-            }, 22000);
         }
 
         function uuid() {
@@ -399,7 +396,8 @@
         }
 
         function resetFlow() {
-
+            initialize();
+            $('.logs').empty();
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);
