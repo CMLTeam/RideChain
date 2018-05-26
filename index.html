@@ -195,7 +195,7 @@
                     prevP = coords;
                     route.getPath().push(coords);
                     moveMarker(map, marker, coords);
-                }, 200 * i, pathCoords[i]);
+                }, 260 * i, pathCoords[i]);
             }
         }
 
@@ -209,7 +209,8 @@
             // var end = new google.maps.LatLng(44.062912, 3.026836);
 
             // var start = new google.maps.LatLng(44.142829, 3.017506);
-            var end = new google.maps.LatLng(44.062912, 3.026836);
+            // var end = new google.maps.LatLng(44.062912, 3.026836);
+            var end = new google.maps.LatLng(44.06586, 3.02531);
 
             var request = {
                 origin: start,
@@ -237,15 +238,15 @@
 <div id="map" class="column left"></div>
 <div id="blockchain-log" class="column right">
     <div id="access">
-        <div class="header">Blockchain Access Transactions</div>
+        <div class="header">Smart Contract #1: Access Token</div>
         <div class="logs"></div>
     </div>
     <div id="sensor">
-        <div class="header">Blockchain Sensors Logging</div>
+        <div class="header">Smart Contract #2: Car States Logging</div>
         <div class="logs"></div>
     </div>
     <div id="payment">
-        <div class="header">Blockchain Payments</div>
+        <div class="header">Smart Contract #3: Payments Processing</div>
         <div class="logs"></div>
     </div>
 </div>
