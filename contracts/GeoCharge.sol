@@ -3,7 +3,7 @@ pragma solidity 0.4.23;
 /// @dev Contract GeoCharge allows for automatic charge of the vehicle
 ///      when it passes one of the predefined checkpoints
 contract GeoCharge {
-  mapping(address => uint256) public pendingCharges;
+  mapping(address => uint64) public pendingCharges;
 
   /// @dev Array of checkpoints (latitudes)
   uint32[] public lats;
@@ -31,7 +31,8 @@ contract GeoCharge {
     uint32 actualLon,
     uint64 fee,
     uint64 charged,
-    uint64 pendingCharge
+    uint64 pendingCharge,
+    uint64 totalPendingCharges
   );
 
   /// @dev creates an instance with the settings specified
@@ -79,25 +80,65 @@ contract GeoCharge {
     uint64 charged = 0;
     uint64 pendingCharge = 0;
 
+    // how much value we have in this transaction
+    uint64 value = uint64(msg.value);
+    // overflow check
+    require(msg.value == uint256(value));
+
     // iterate over array of checkpoints
     for(uint32 i = 0; i < lats.length; i++) {
       // try to find intersected checkpoint
       if(uint64(lats[i] - lat)**2 + uint64(lons[i] - lon)**2 < uint64(leeways[i])**2) {
-
-
+        checkpointLat = lats[i];
+        checkpointLon = lons[i];
+        leeway = leeways[i];
+        fee = fees[i];
+        break;
       }
-
-      // return zero if point not found
-      return 0;
     }
 
     // if fee is not zero - try to charge
     if(fee > 0) {
+      // if we have enough value
+      if(value >= fee) {
+        // charge full fee
+        charged = fee;
+      }
+      else {
+        // otherwise add to pending charges
+        pendingCharge = fee;
+      }
+    }
 
+    // try to consume pending charges if any
+    if(value - charged > 0 && pendingCharges[msg.sender] > 0) {
+      // if value sent is enough to cover all pending charges
+      if(value >= charged + pendingCharges[msg.sender]) {
+        // cover them all
+        charged += pendingCharges[msg.sender];
+      }
+      else {
+        // otherwise cover only what we have
+        charged = value;
+      }
+    }
+
+    // transfer charge if any
+    if(charged > 0) {
+      owner.transfer(charged);
+    }
+    // persist pending charge if any
+    if(pendingCharge > 0) {
+      pendingCharges[msg.sender] += pendingCharge;
+    }
+
+    // send the charge back to vehicle if any
+    if(value > charged) {
+      msg.sender.transfer(value - charged);
     }
 
     // emit an event
-    emit PassedThrough(msg.sender, now, checkpointLat, actualLon, leeway, lat, lon, fee, charged, pendingCharge);
+    emit PassedThrough(msg.sender, uint32(now), checkpointLat, checkpointLon, leeway, lat, lon, fee, charged, pendingCharge, pendingCharges[msg.sender]);
   }
 
 }
