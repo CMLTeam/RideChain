@@ -94,20 +94,20 @@
     <script>
         function addTransactionLog(data) {
             $('#payment .logs').prepend(
-			    "<p style='color:red;'>Transaction : " + data.id + "<BR> Cost : " + data.coins + " coins" + "</p>"
-			);
+                "<p style='color:red;'>Transaction : " + data.id + "<BR> Cost : " + data.coins + " coins" + "</p>"
+            );
         }
 
         function addSensorsLog(data) {
             $('#sensor .logs').prepend(
-			    "<p>Transaction : " + data.id + "<BR> GPS : " + data.gps + "</p>"
-			);
+                "<p>Transaction : " + data.id + "<BR> GPS : " + data.gps + "</p>"
+            );
         }
 
-        function addAccessLog(data,flag) {
+        function addAccessLog(data, flag) {
             $('#access .logs').prepend(
-			    "<p style='color:" +(flag?"red":"green")+"'>Transaction : " + data.id +"<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
-			);
+                "<p style='color:" + (flag ? "red" : "green") + "'>Transaction : " + data.id + "<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
+            );
         }
     </script>
     <script>
@@ -267,7 +267,7 @@
             setTimeout(function () {
                 var $img = $('div>img[src="' + CAR_ICON + '"]:visible');
                 $img.css('transform', 'rotate(35deg)');
-            },200);
+            }, 200);
 
             man1Marker = new google.maps.Marker({
                 map: map,
@@ -282,7 +282,8 @@
 
 
             // payMarker.setPosition(new google.maps.LatLng(44.134150, 3.025150));
-            var payPosition = new google.maps.LatLng(44.10112, 3.0228900000000003);
+            // var payPosition = new google.maps.LatLng(44.10112, 3.0228900000000003);
+            var payPosition = new google.maps.LatLng(44.097770000000004,3.0211500000000004);
             payMarker.setPosition(payPosition);
 
             map.panTo(payPosition);
@@ -316,52 +317,63 @@
             var result;
             //result = accessContract.addOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11',1);
             // addAccessLog({id:result.id, access: result?"Access Granted":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
-            addAccessLog({id:uuid(), action: "Access Granted", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'},0);
-            for (var i = 0; i < pathCoords.length; i++) {
-                setTimeout(function (i) {
-                    var coords = pathCoords[i];
-                    // console.info(222, coords.lat(), coords.lng())
-                    var $img = $('div>img[src="' + CAR_ICON + '"]:visible');
-                    // console.info($img[0])
-                    var result;
-                    //result = sensorsContract.log(coords.lat()+coords.lng());
-                    // addSensorsLog({id:result.id, gps: gps});
-                    var gps = coords.lat().toString().substr(0, 7) + ", " + coords.lng().toString().substr(0, 7);
-                    addSensorsLog({id: uuid(), gps: gps});
-                    //result =paymentContract.pay(2);
-                    // if (result){
-                    //     addTransactionLog({id:result.id, coins:result.coins});
-                    // }
-                    if (parseFloat(coords.lat()) < 44.10112 && !paymentDone) {
-                        addTransactionLog({id: uuid(), coins: 2});
-                        paymentDone = true;
-                    }
-                    if (prevP) {
-                        var deg = getDeg(prevP.lat(), prevP.lng(), coords.lat(), coords.lng());
-                        // console.info(111, coords, deg)
-                        $img.css('transform', 'rotate(' + (deg - 90) + 'deg)')
-                    }
-                    prevP = coords;
-                    route.getPath().push(coords);
-                    moveMarker(map, carMarker, coords);
-
-                    if (i === pathCoords.length - 1) {
-                        man2Marker = new google.maps.Marker({
-                            map: map,
-                            icon: {
-                                url: "man2.png",
-                                scaledSize: new google.maps.Size(SIZE, SIZE)
-                            }
-                        });
-                        var startMan2 = new google.maps.LatLng(44.06286, 3.03231);
-                        man2Marker.setPosition(startMan2);
+            addAccessLog({
+                id: uuid(),
+                action: "Access Granted",
+                token: '0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'
+            }, 0);
+            setTimeout(function () {
+                man1Marker.setMap(null);
+                for (var i = 0; i < pathCoords.length; i++) {
+                    setTimeout(function (i) {
+                        var coords = pathCoords[i];
+                        console.info(222, coords.lat(), coords.lng())
+                        var $img = $('div>img[src="' + CAR_ICON + '"]:visible');
+                        // console.info($img[0])
                         var result;
-                        //result = accessContract.removeOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11');
-                        // addAccessLog({id:result.id, access: result?"Access Revoked":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
-                        addAccessLog({id:uuid(), action: "Access Revoked", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'},1);
-                    }
-                }, 250 * i, i);
-            }
+                        //result = sensorsContract.log(coords.lat()+coords.lng());
+                        // addSensorsLog({id:result.id, gps: gps});
+                        var gps = coords.lat().toString().substr(0, 7) + ", " + coords.lng().toString().substr(0, 7);
+                        addSensorsLog({id: uuid(), gps: gps});
+                        //result =paymentContract.pay(2);
+                        // if (result){
+                        //     addTransactionLog({id:result.id, coins:result.coins});
+                        // }
+                        if (parseFloat(coords.lat()) < 44.10112 && !paymentDone) {
+                            addTransactionLog({id: uuid(), coins: 2});
+                            paymentDone = true;
+                        }
+                        if (prevP) {
+                            var deg = getDeg(prevP.lat(), prevP.lng(), coords.lat(), coords.lng());
+                            // console.info(111, coords, deg)
+                            $img.css('transform', 'rotate(' + (deg - 90) + 'deg)')
+                        }
+                        prevP = coords;
+                        route.getPath().push(coords);
+                        moveMarker(map, carMarker, coords);
+
+                        if (i === pathCoords.length - 1) {
+                            man2Marker = new google.maps.Marker({
+                                map: map,
+                                icon: {
+                                    url: "man2.png",
+                                    scaledSize: new google.maps.Size(SIZE, SIZE)
+                                }
+                            });
+                            var startMan2 = new google.maps.LatLng(44.06286, 3.03231);
+                            man2Marker.setPosition(startMan2);
+                            var result;
+                            //result = accessContract.removeOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11');
+                            // addAccessLog({id:result.id, access: result?"Access Revoked":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
+                            addAccessLog({
+                                id: uuid(),
+                                action: "Access Revoked",
+                                token: '0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'
+                            }, 1);
+                        }
+                    }, 285 * i, i);
+                }
+            }, 5000);
         }
 
         function uuid() {
@@ -392,7 +404,6 @@
         }
 
         function startFlow() {
-            man1Marker.setMap(null);
             getDirections(map);
         }
 
@@ -425,6 +436,9 @@
         <div class="header">Smart Contract #3: Payments Processing</div>
         <div class="logs"></div>
     </div>
+</div>
+<div style="position: fixed; left:0; top: 0; color: #000; z-index: 100; background: #fff; font-size: 2em; padding: 5px">
+    RideChain
 </div>
 </body>
 </html>
