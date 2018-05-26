@@ -35,6 +35,7 @@
         #blockchain-log {
             position: relative;
         }
+
         #blockchain-log div {
             height: 33%;
             width: 99%;
@@ -92,103 +93,103 @@
     <script>
         function addTransactionLog(data) {
             $('#payment .logs').prepend(
-			    "<p>Transaction " + data.id + " Cost : " + data.coins + " coins" + "</p>"
-			);
+                "<p>Transaction " + data.id + " Cost : " + data.coins + " coins" + "</p>"
+            );
         }
 
         function addSensorsLog(data) {
             $('#sensor .logs').prepend(
-			    "<p>Transaction " + data.id + "<BR> GPS : " + data.gps + "</p>"
-			);
+                "<p>Transaction " + data.id + "<BR> GPS : " + data.gps + "</p>"
+            );
         }
 
         function addAccessLog(data) {
             $('#access .logs').prepend(
-			    "<p >Transaction " + data.id +" Token : " + data.token + " " + data.action + "</p>"
-			);
+                "<p >Transaction " + data.id + " Token : " + data.token + " " + data.action + "</p>"
+            );
         }
     </script>
     <script>
         const access_abi = [{
             "constant": false,
             "inputs": [
-              {
-                "name": "operator",
-                "type": "address"
-              },
-              {
-                "name": "role",
-                "type": "uint256"
-              }
+                {
+                    "name": "operator",
+                    "type": "address"
+                },
+                {
+                    "name": "role",
+                    "type": "uint256"
+                }
             ],
             "name": "addOperator",
             "outputs": [
-              {
-                "name": "success",
-                "type": "bool"
-              }
+                {
+                    "name": "success",
+                    "type": "bool"
+                }
             ],
             "payable": false,
             "type": "function"
-          },
-          {
-            "constant": false,
-            "inputs": [
-              {
-                "name": "operator",
-                "type": "address"
-              }
-            ],
-            "name": "removeOperator",
-            "outputs": [
-              {
-                "name": "success",
-                "type": "bool"
-              }
-            ],
-            "payable": false,
-            "type": "function"
-          }];
+        },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "operator",
+                        "type": "address"
+                    }
+                ],
+                "name": "removeOperator",
+                "outputs": [
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            }];
         const sensors_abi = [{
             "constant": false,
             "inputs": [
-              {
-                "name": "data",
-                "type": "uint256"
-              }
+                {
+                    "name": "data",
+                    "type": "uint256"
+                }
             ],
             "name": "log",
             "outputs": [
-              {
-                "name": "success",
-                "type": "bool"
-              }
+                {
+                    "name": "success",
+                    "type": "bool"
+                }
             ],
             "payable": false,
             "type": "function"
-          }];
+        }];
         const payment_abi = [{
             "constant": false,
             "inputs": [
-              {
-                "name": "data",
-                "type": "uint256"
-              }
+                {
+                    "name": "data",
+                    "type": "uint256"
+                }
             ],
             "name": "pay",
             "outputs": [
-              {
-                "name": "success",
-                "type": "bool"
-              }
+                {
+                    "name": "success",
+                    "type": "bool"
+                }
             ],
             "type": "function"
-          }];
+        }];
         const access_address = '0x10B3f0C8a7188f027c919D378889d5a21cF94Ba6';
         const payment_address = '0x7011f3edc7fa43c81440f9f43a6458174113b162';
         const sensors_address = '0xc2D082F35b6c1688fFcc17C3Bae0792c59A9CD11';
-        window.addEventListener('load', function() {
-          if (typeof web3 !== 'undefined') {
+        window.addEventListener('load', function () {
+            if (typeof web3 !== 'undefined') {
                 const eth = new Eth(web3.currentProvider);
                 const contract = new EthContract(eth);
 
@@ -200,7 +201,7 @@
 
                 const SensorsContract = contract(access_abi);
                 const sensorsContract = SensorsContract.at(sensors_address);
-          }
+            }
         });
 
     </script>
@@ -220,9 +221,19 @@
         }
 
         var SIZE = 60;
+        var map;
+        // var start = new google.maps.LatLng(51.5087531, -0.1281153);
+        // var end = new google.maps.LatLng(48.8583694, 2.2944796);
+
+        var start = new google.maps.LatLng(44.134150, 3.025150);
+        // var end = new google.maps.LatLng(44.062912, 3.026836);
+
+        // var start = new google.maps.LatLng(44.142829, 3.017506);
+        // var end = new google.maps.LatLng(44.062912, 3.026836);
+        var end = new google.maps.LatLng(44.06586, 3.02531);
 
         function initialize() {
-            var map = new google.maps.Map(document.getElementById("map"), {
+            map = new google.maps.Map(document.getElementById("map"), {
                 center: {lat: 51.5087531, lng: -0.1281153},
                 // zoom: 7,
                 // zoom: 12,
@@ -233,11 +244,42 @@
 
             // var marker1=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
             var payMarker = new google.maps.Marker({
-                map: map, icon: {
+                map: map,
+                icon: {
                     url: "bank_map_pointer-512.png",
                     scaledSize: new google.maps.Size(SIZE, SIZE)
                 }
             });
+
+            var man1Marker = new google.maps.Marker({
+                map: map,
+                icon: {
+                    url: "man1.png",
+                    scaledSize: new google.maps.Size(SIZE, SIZE)
+                }
+            });
+
+            carMarker = new google.maps.Marker({
+                map: map,
+                icon: {
+                    url: CAR_ICON,
+                    scaledSize: new google.maps.Size(SIZE, SIZE),
+                    // origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(SIZE / 2, SIZE / 2)
+                }
+            });
+            carMarker.setPosition(start);
+
+            setTimeout(function () {
+                var $img = $('div>img[src="' + CAR_ICON + '"]:visible');
+                $img.css('transform', 'rotate(35deg)');
+            },200)
+
+            var startMan1 = new google.maps.LatLng(44.126150, 3.019150);
+
+
+            man1Marker.setPosition(startMan1);
+
 
             // payMarker.setPosition(new google.maps.LatLng(44.134150, 3.025150));
             var payPosition = new google.maps.LatLng(44.10112, 3.0228900000000003);
@@ -256,13 +298,12 @@
             //     map.panTo(latlng);
         }
 
+        var CAR_ICON = 'car2.png';
         var prevP;
-        var paymentDone;
+        var paymentDone, carMarker;
 
         function autoRefresh(map, pathCoords) {
-            var i, route, marker;
-
-            route = new google.maps.Polyline({
+            var route = new google.maps.Polyline({
                 path: [],
                 geodesic: true,
                 strokeColor: '#00AA00',
@@ -274,36 +315,23 @@
                 map: map
             });
 
-            var ICON = 'car2.png';
-            marker = new google.maps.Marker({
-                map: map, icon: {
-                    url: ICON,
-                    // This marker is 20 pixels wide by 32 pixels high.
-                    scaledSize: new google.maps.Size(SIZE, SIZE),
-                    // The origin for this image is (0, 0).
-                    // origin: new google.maps.Point(0, 0),
-                    // The anchor for this image is the base of the flagpole at (0, 32).
-                    anchor: new google.maps.Point(SIZE / 2, SIZE / 2)
-                }
-            });
-
-            for (i = 0; i < pathCoords.length; i++) {
+            for (var i = 0; i < pathCoords.length; i++) {
                 setTimeout(function (coords) {
                     // console.info(222, coords.lat(), coords.lng())
-                    var $img = $('div>img[src="' + ICON + '"]:visible');
+                    var $img = $('div>img[src="' + CAR_ICON + '"]:visible');
                     // console.info($img[0])
                     var result;
                     //result = sensorsContract.data(coords.lat()+coords.lng());
                     // addSensorsLog({id:result.id, gps: gps});
-                    var gps = coords.lat().toString().substr(0,7) +", "+coords.lng().toString().substr(0,7);
-                    addSensorsLog({id:uuid(), gps: gps});
+                    var gps = coords.lat().toString().substr(0, 7) + ", " + coords.lng().toString().substr(0, 7);
+                    addSensorsLog({id: uuid(), gps: gps});
                     //result =paymentContract.pay(2);
                     // if (result){
                     //     addTransactionLog({id:result.id, coins:result.coins});
                     // }
-                    if (parseFloat(coords.lat()) < 44.10112 && !paymentDone){
-                          addTransactionLog({id:uuid(), coins: 2});
-                          paymentDone = true;
+                    if (parseFloat(coords.lat()) < 44.10112 && !paymentDone) {
+                        addTransactionLog({id: uuid(), coins: 2});
+                        paymentDone = true;
                     }
                     if (prevP) {
                         var deg = getDeg(prevP.lat(), prevP.lng(), coords.lat(), coords.lng());
@@ -312,10 +340,11 @@
                     }
                     prevP = coords;
                     route.getPath().push(coords);
-                    moveMarker(map, marker, coords);
+                    moveMarker(map, carMarker, coords);
                 }, 260 * i, pathCoords[i]);
             }
         }
+
         function uuid() {
             function s4() {
                 return Math.floor((1 + Math.random()) * 0x10000)
@@ -326,18 +355,9 @@
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                 s4() + '-' + s4() + s4() + s4();
         }
+
         function getDirections(map) {
             var directionsService = new google.maps.DirectionsService();
-
-            // var start = new google.maps.LatLng(51.5087531, -0.1281153);
-            // var end = new google.maps.LatLng(48.8583694, 2.2944796);
-
-            var start = new google.maps.LatLng(44.134150, 3.025150);
-            // var end = new google.maps.LatLng(44.062912, 3.026836);
-
-            // var start = new google.maps.LatLng(44.142829, 3.017506);
-            // var end = new google.maps.LatLng(44.062912, 3.026836);
-            var end = new google.maps.LatLng(44.06586, 3.02531);
 
             var request = {
                 origin: start,
@@ -346,8 +366,8 @@
             };
             directionsService.route(request, function (result, status) {
                 if (status === google.maps.DirectionsStatus.OK) {
-                    console.info(111, result.routes[0])
-                    autoRefresh(map, result.routes[0].overview_path);
+                    // console.info(111, result.routes[0])
+                    // autoRefresh(map, result.routes[0].overview_path);
                 }
             });
         }
@@ -357,9 +377,9 @@
 </head>
 <body>
 <div class="controls">
-    <button class="start" onclick="addTransactionLog({id: 123 })">Start</button>
-    <button class="pause" onclick="addSensorsLog({id: 123 })">Pause</button>
-    <button class="reset" onclick="addAccessLog({id: 123 })">Reset</button>
+    <button class="start" onclick="startFlow()">Start</button>
+    <!--<button class="pause" onclick="addSensorsLog({id: 123 })">Pause</button>-->
+    <button class="reset" onclick="resetFlow()">Reset</button>
 </div>
 
 <div id="map" class="column left"></div>
