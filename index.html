@@ -357,7 +357,7 @@
                         var result;
                         //result = accessContract.removeOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11');
                         // addAccessLog({id:result.id, access: result?"Access Revoked":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
-                        addAccessLog({id:uuid(), action: "Access Revoked", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
+                        addAccessLog({id:uuid(), action: "Access Revoked", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'},1);
                     }
                 }, 260 * i, i);
             }
