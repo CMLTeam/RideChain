@@ -19,6 +19,12 @@
             clear: both;
         }
 
+        .btn1 {
+            width: 100px;
+            height: 50px;
+            font-weight: bold;
+        }
+
         .column {
             height: 100%;
             float: left;
@@ -65,10 +71,11 @@
         }
 
         .controls {
-            position: absolute;
-            top: 0;
-            left: 200px;
+            position: fixed;
+            /*top: 0;*/
+            /*left: 200px;*/
             z-index: 999;
+            left: 10px; bottom: 10px
         }
 
         .controls button {
@@ -94,7 +101,7 @@
     <script>
         function addTransactionLog(data) {
             $('#payment .logs').prepend(
-                "<p style='color:red;'>Transaction : " + data.id + "<BR> Cost : " + data.coins + " coins" + "</p>"
+                "<p style='color:green;'>Transaction : " + data.id + "<BR> Cost : " + data.coins + " EUR" + "</p>"
             );
         }
 
@@ -106,7 +113,7 @@
 
         function addAccessLog(data, flag) {
             $('#access .logs').prepend(
-                "<p style='color:" + (flag ? "red" : "green") + "'>Transaction : " + data.id + "<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
+                "<p style='color:" + (flag ? "red" : "blue") + "'>Transaction : " + data.id + "<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
             );
         }
     </script>
@@ -282,7 +289,8 @@
                 // zoom: 7,
                 // zoom: 12,
                 zoom: 13,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true
                 // mapTypeId: google.maps.MapTypeId.TERRAIN
             });
             // showText(start, "STEP 1: Access Granted");
@@ -388,7 +396,7 @@
                         //     addTransactionLog({id:result.id, coins:result.coins});
                         // }
                         if (parseFloat(coords.lat()) < 44.10112 && !paymentDone) {
-                            addTransactionLog({id: uuid(), coins: 2});
+                            addTransactionLog({id: uuid(), coins: 7.50});
                             paymentDone = true;
                         }
                         if (prevP) {
@@ -465,9 +473,9 @@
 </head>
 <body>
 <div class="controls">
-    <button class="start" onclick="startFlow()">Start</button>
+    <button class="btn1 start" onclick="startFlow()">Start</button>
     <!--<button class="pause" onclick="addSensorsLog({id: 123 })">Pause</button>-->
-    <button class="reset" onclick="resetFlow()">Reset</button>
+    <button class="btn1 reset" onclick="resetFlow()">Reset</button>
 </div>
 
 <div id="map" class="column left"></div>
@@ -487,7 +495,8 @@
 </div>
 <div style="position: fixed; left:0; top: 0; color: #000; z-index: 100; background: #edebe8;
 font-size: 2em; font-weight: bold; padding: 5px">
-    RideChain
+    <!--RideChain-->
+    <img src="CarLogo2.png" style="width: 150px">
 </div>
 </body>
 </html>
