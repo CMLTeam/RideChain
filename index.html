@@ -93,7 +93,7 @@
     <script>
         function addTransactionLog(data) {
             $('#payment .logs').prepend(
-			    "<p>Transaction : " + data.id + "<BR> Cost : " + data.coins + " coins" + "</p>"
+			    "<p style='color:red;'>Transaction : " + data.id + "<BR> Cost : " + data.coins + " coins" + "</p>"
 			);
         }
 
@@ -103,9 +103,9 @@
 			);
         }
 
-        function addAccessLog(data) {
+        function addAccessLog(data,flag) {
             $('#access .logs').prepend(
-			    "<p >Transaction : " + data.id +"<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
+			    "<p style='color:" +(flag?"red":"green")+"'>Transaction : " + data.id +"<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
 			);
         }
     </script>
