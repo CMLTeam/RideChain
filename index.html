@@ -234,6 +234,24 @@
         var end = new google.maps.LatLng(44.06586, 3.02531);
         var man1Marker, man2Marker;
 
+        function showText(latLong, text) {
+            var marker = new google.maps.Marker({
+                position: latLong,
+                draggable: true,
+                map: map,
+                icon: new google.maps.MarkerImage(
+                    "http://chart.googleapis.com/chart?chst=d_bubble_text_small&chld=bb|" + text + "|FFFFFF|000000",
+                    null, null, new google.maps.Point(0, 42)),
+                shadow: new google.maps.MarkerImage(
+                    "http://chart.googleapis.com/chart?chst=d_bubble_text_small_shadow&chld=bb|" + text,
+                    null, null, new google.maps.Point(0, 45))
+            });
+
+            return function () {
+                marker.setMap(null);
+            }
+        }
+
         function initialize() {
             map = new google.maps.Map(document.getElementById("map"), {
                 center: {lat: 51.5087531, lng: -0.1281153},
@@ -283,7 +301,7 @@
 
             // payMarker.setPosition(new google.maps.LatLng(44.134150, 3.025150));
             // var payPosition = new google.maps.LatLng(44.10112, 3.0228900000000003);
-            var payPosition = new google.maps.LatLng(44.097770000000004,3.0211500000000004);
+            var payPosition = new google.maps.LatLng(44.097770000000004, 3.0211500000000004);
             payMarker.setPosition(payPosition);
 
             map.panTo(payPosition);
@@ -322,6 +340,7 @@
                 action: "Access Granted",
                 token: '0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'
             }, 0);
+            // showText(start, "STEP 1: Access Granted");
             setTimeout(function () {
                 man1Marker.setMap(null);
                 for (var i = 0; i < pathCoords.length; i++) {
