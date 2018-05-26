@@ -231,6 +231,7 @@
         // var start = new google.maps.LatLng(44.142829, 3.017506);
         // var end = new google.maps.LatLng(44.062912, 3.026836);
         var end = new google.maps.LatLng(44.06586, 3.02531);
+        var man1Marker, man2Marker;
 
         function initialize() {
             map = new google.maps.Map(document.getElementById("map"), {
@@ -251,14 +252,6 @@
                 }
             });
 
-            var man1Marker = new google.maps.Marker({
-                map: map,
-                icon: {
-                    url: "man1.png",
-                    scaledSize: new google.maps.Size(SIZE, SIZE)
-                }
-            });
-
             carMarker = new google.maps.Marker({
                 map: map,
                 icon: {
@@ -273,11 +266,17 @@
             setTimeout(function () {
                 var $img = $('div>img[src="' + CAR_ICON + '"]:visible');
                 $img.css('transform', 'rotate(35deg)');
-            },200)
+            },200);
 
+            man1Marker = new google.maps.Marker({
+                map: map,
+                icon: {
+                    url: "man1.png",
+                    scaledSize: new google.maps.Size(SIZE, SIZE)
+                }
+            });
             var startMan1 = new google.maps.LatLng(44.126150, 3.019150);
-
-
+            // var startMan1 = new google.maps.LatLng(44.06386, 3.03031);
             man1Marker.setPosition(startMan1);
 
 
@@ -286,8 +285,6 @@
             payMarker.setPosition(payPosition);
 
             map.panTo(payPosition);
-
-            getDirections(map);
         }
 
         var jjj = 0;
@@ -320,7 +317,8 @@
             // addAccessLog({id:result.id, access: result?"Access Granted":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
             addAccessLog({id:uuid(), action: "Access Granted", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
             for (var i = 0; i < pathCoords.length; i++) {
-                setTimeout(function (coords) {
+                setTimeout(function (i) {
+                    var coords = pathCoords[i];
                     // console.info(222, coords.lat(), coords.lng())
                     var $img = $('div>img[src="' + CAR_ICON + '"]:visible');
                     // console.info($img[0])
@@ -345,7 +343,19 @@
                     prevP = coords;
                     route.getPath().push(coords);
                     moveMarker(map, carMarker, coords);
-                }, 260 * i, pathCoords[i]);
+
+                    if (i === pathCoords.length - 1) {
+                        man2Marker = new google.maps.Marker({
+                            map: map,
+                            icon: {
+                                url: "man2.png",
+                                scaledSize: new google.maps.Size(SIZE, SIZE)
+                            }
+                        });
+                        var startMan2 = new google.maps.LatLng(44.06386, 3.03031);
+                        man2Marker.setPosition(startMan2);
+                    }
+                }, 260 * i, i);
             }
 
             setTimeout(function (coords) {
@@ -378,9 +388,18 @@
             directionsService.route(request, function (result, status) {
                 if (status === google.maps.DirectionsStatus.OK) {
                     // console.info(111, result.routes[0])
-                    // autoRefresh(map, result.routes[0].overview_path);
+                    autoRefresh(map, result.routes[0].overview_path);
                 }
             });
+        }
+
+        function startFlow() {
+            man1Marker.setMap(null);
+            getDirections(map);
+        }
+
+        function resetFlow() {
+
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);
