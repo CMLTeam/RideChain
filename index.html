@@ -98,7 +98,7 @@
 
         function addSensorsLog(data) {
             $('#sensor .logs').prepend(
-			    "<p>Transaction " + data.id + " GPS : " + data.gps + "</p>"
+			    "<p>Transaction " + data.id + "<BR> GPS : " + data.gps + "</p>"
 			);
         }
 
@@ -257,6 +257,7 @@
         }
 
         var prevP;
+        var paymentDone;
 
         function autoRefresh(map, pathCoords) {
             var i, route, marker;
@@ -294,14 +295,15 @@
                     var result;
                     //result = sensorsContract.data(coords.lat()+coords.lng());
                     // addSensorsLog({id:result.id, gps: gps});
-                    var gps = coords.lat().toString().substr(0,7) +":"+coords.lng().toString().substr(0,7);
-                    addSensorsLog({id:12345, gps: gps});
+                    var gps = coords.lat().toString().substr(0,7) +", "+coords.lng().toString().substr(0,7);
+                    addSensorsLog({id:uuid(), gps: gps});
                     //result =paymentContract.pay(2);
                     // if (result){
                     //     addTransactionLog({id:result.id, coins:result.coins});
                     // }
-                    if (parseFloat(coords.lat()) < 44.10112){
-                          addTransactionLog({id:12345, coins: 2});
+                    if (parseFloat(coords.lat()) < 44.10112 && !paymentDone){
+                          addTransactionLog({id:uuid(), coins: 2});
+                          paymentDone = true;
                     }
                     if (prevP) {
                         var deg = getDeg(prevP.lat(), prevP.lng(), coords.lat(), coords.lng());
@@ -314,7 +316,16 @@
                 }, 260 * i, pathCoords[i]);
             }
         }
+        function uuid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
 
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+        }
         function getDirections(map) {
             var directionsService = new google.maps.DirectionsService();
 
