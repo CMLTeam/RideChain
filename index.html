@@ -91,23 +91,120 @@
 
     <script>
         function addTransactionLog(data) {
-            $('#access .logs').prepend(
-                "<p>Transaction " + data.id + " Cost : " + data.coins + " coins</p>"
-            );
+            $('#payment .logs').prepend(
+			    "<p>Transaction " + data.id + " Cost : " + data.coins + " coins" + "</p>"
+			);
         }
 
         function addSensorsLog(data) {
             $('#sensor .logs').prepend(
-                "<p>Transaction " + data.id + " Speed : " + data.speed + " km/h GPS : " + data.gps + "</p>"
-            );
+			    "<p>Transaction " + data.id + " GPS : " + data.gps + "</p>"
+			);
         }
 
         function addAccessLog(data) {
-            $('#payment .logs').prepend(
-                "<p>Transaction " + data.id + " Token : " + data.token + " " + data.action + "</p>"
-            );
+            $('#access .logs').prepend(
+			    "<p >Transaction " + data.id +" Token : " + data.token + " " + data.action + "</p>"
+			);
         }
+    </script>
+    <script>
+        const access_abi = [{
+            "constant": false,
+            "inputs": [
+              {
+                "name": "operator",
+                "type": "address"
+              },
+              {
+                "name": "role",
+                "type": "uint256"
+              }
+            ],
+            "name": "addOperator",
+            "outputs": [
+              {
+                "name": "success",
+                "type": "bool"
+              }
+            ],
+            "payable": false,
+            "type": "function"
+          },
+          {
+            "constant": false,
+            "inputs": [
+              {
+                "name": "operator",
+                "type": "address"
+              }
+            ],
+            "name": "removeOperator",
+            "outputs": [
+              {
+                "name": "success",
+                "type": "bool"
+              }
+            ],
+            "payable": false,
+            "type": "function"
+          }];
+        const sensors_abi = [{
+            "constant": false,
+            "inputs": [
+              {
+                "name": "data",
+                "type": "uint256"
+              }
+            ],
+            "name": "log",
+            "outputs": [
+              {
+                "name": "success",
+                "type": "bool"
+              }
+            ],
+            "payable": false,
+            "type": "function"
+          }];
+        const payment_abi = [{
+            "constant": false,
+            "inputs": [
+              {
+                "name": "data",
+                "type": "uint256"
+              }
+            ],
+            "name": "pay",
+            "outputs": [
+              {
+                "name": "success",
+                "type": "bool"
+              }
+            ],
+            "type": "function"
+          }];
+        const access_address = '0x10B3f0C8a7188f027c919D378889d5a21cF94Ba6';
+        const payment_address = '0x7011f3edc7fa43c81440f9f43a6458174113b162';
+        const sensors_address = '0xc2D082F35b6c1688fFcc17C3Bae0792c59A9CD11';
+        window.addEventListener('load', function() {
+          if (typeof web3 !== 'undefined') {
+                const eth = new Eth(web3.currentProvider);
+                const contract = new EthContract(eth);
 
+                const AccessContract = contract(access_abi);
+                const accessContract = AccessContract.at(access_address);
+
+                const PaymentContract = contract(access_abi);
+                const paymentContract = PaymentContract.at(payment_address);
+
+                const SensorsContract = contract(access_abi);
+                const sensorsContract = SensorsContract.at(sensors_address);
+          }
+        });
+
+    </script>
+    <script>
         function getDeg(lat1, lon1, lat2, lon2) {
             var lat1 = lat1 * Math.PI / 180;
             var lat2 = lat2 * Math.PI / 180;
@@ -194,6 +291,18 @@
                     // console.info(222, coords.lat(), coords.lng())
                     var $img = $('div>img[src="' + ICON + '"]:visible');
                     // console.info($img[0])
+                    var result;
+                    //result = sensorsContract.data(coords.lat()+coords.lng());
+                    // addSensorsLog({id:result.id, gps: gps});
+                    var gps = coords.lat().toString().substr(0,7) +":"+coords.lng().toString().substr(0,7);
+                    addSensorsLog({id:12345, gps: gps});
+                    //result =paymentContract.pay(2);
+                    // if (result){
+                    //     addTransactionLog({id:result.id, coins:result.coins});
+                    // }
+                    if (parseFloat(coords.lat()) < 44.10112){
+                          addTransactionLog({id:12345, coins: 2});
+                    }
                     if (prevP) {
                         var deg = getDeg(prevP.lat(), prevP.lng(), coords.lat(), coords.lng());
                         // console.info(111, coords, deg)
