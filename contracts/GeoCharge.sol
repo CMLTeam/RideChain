@@ -3,6 +3,8 @@ pragma solidity 0.4.23;
 /// @dev Contract GeoCharge allows for automatic charge of the vehicle
 ///      when it passes one of the predefined checkpoints
 contract GeoCharge {
+  /// @dev If during the `passedThrough` there was enough funds to
+  ///      charge, we store that in `pendingCharges` to be able to charge later
   mapping(address => uint64) public pendingCharges;
 
   /// @dev Array of checkpoints (latitudes)
