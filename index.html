@@ -101,19 +101,21 @@
     <script>
         function addTransactionLog(data) {
             $('#payment .logs').prepend(
-                "<p style='color:green;'>Transaction : " + data.id + "<BR> Cost : " + data.coins + " EUR" + "</p>"
+                "<p style='color:green;'>"+addTransactionLog.id+++". Transaction : " + data.id + "<BR> Cost : " + data.coins + " EUR" + "</p>"
             );
         }
 
         function addSensorsLog(data) {
+            addSensorsLog.id = addSensorsLog.id || 1;
             $('#sensor .logs').prepend(
-                "<p>Transaction : " + data.id + "<BR> GPS : " + data.gps + "</p>"
+                "<p>"+addSensorsLog.id+++". Transaction : " + data.id + "<BR> GPS : " + data.gps + "</p>"
             );
         }
 
         function addAccessLog(data, flag) {
+            addAccessLog.id = addAccessLog.id || 1;
             $('#access .logs').prepend(
-                "<p style='color:" + (flag ? "red" : "blue") + "'>Transaction : " + data.id + "<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
+                "<p style='color:" + (flag ? "red" : "blue") + "'>"+addAccessLog.id+++". Transaction : " + data.id + "<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
             );
         }
     </script>
