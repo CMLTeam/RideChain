@@ -93,20 +93,20 @@
     <script>
         function addTransactionLog(data) {
             $('#payment .logs').prepend(
-                "<p>Transaction " + data.id + " Cost : " + data.coins + " coins" + "</p>"
-            );
+			    "<p>Transaction : " + data.id + "<BR> Cost : " + data.coins + " coins" + "</p>"
+			);
         }
 
         function addSensorsLog(data) {
             $('#sensor .logs').prepend(
-                "<p>Transaction " + data.id + "<BR> GPS : " + data.gps + "</p>"
-            );
+			    "<p>Transaction : " + data.id + "<BR> GPS : " + data.gps + "</p>"
+			);
         }
 
         function addAccessLog(data) {
             $('#access .logs').prepend(
-                "<p >Transaction " + data.id + " Token : " + data.token + " " + data.action + "</p>"
-            );
+			    "<p >Transaction : " + data.id +"<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
+			);
         }
     </script>
     <script>
@@ -315,13 +315,17 @@
                 map: map
             });
 
+            var result;
+            //result = accessContract.addOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11',1);
+            // addAccessLog({id:result.id, access: result?"Access Granted":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
+            addAccessLog({id:uuid(), action: "Access Granted", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
             for (var i = 0; i < pathCoords.length; i++) {
                 setTimeout(function (coords) {
                     // console.info(222, coords.lat(), coords.lng())
                     var $img = $('div>img[src="' + CAR_ICON + '"]:visible');
                     // console.info($img[0])
                     var result;
-                    //result = sensorsContract.data(coords.lat()+coords.lng());
+                    //result = sensorsContract.log(coords.lat()+coords.lng());
                     // addSensorsLog({id:result.id, gps: gps});
                     var gps = coords.lat().toString().substr(0, 7) + ", " + coords.lng().toString().substr(0, 7);
                     addSensorsLog({id: uuid(), gps: gps});
@@ -343,6 +347,13 @@
                     moveMarker(map, carMarker, coords);
                 }, 260 * i, pathCoords[i]);
             }
+
+            setTimeout(function (coords) {
+                var result;
+                //result = accessContract.removeOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11');
+                // addAccessLog({id:result.id, access: result?"Access Revoked":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
+                addAccessLog({id:uuid(), action: "Access Revoked", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
+            }, 22000);
         }
 
         function uuid() {
