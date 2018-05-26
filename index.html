@@ -93,7 +93,7 @@
     <script>
         function addTransactionLog(data) {
             $('#payment .logs').prepend(
-			    "<p>Transaction : " + data.id + "<BR> Cost : " + data.coins + " coins" + "</p>"
+			    "<p style='color:red;'>Transaction : " + data.id + "<BR> Cost : " + data.coins + " coins" + "</p>"
 			);
         }
 
@@ -103,9 +103,9 @@
 			);
         }
 
-        function addAccessLog(data) {
+        function addAccessLog(data,flag) {
             $('#access .logs').prepend(
-			    "<p >Transaction : " + data.id +"<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
+			    "<p style='color:" +(flag?"red":"green")+"'>Transaction : " + data.id +"<BR> Token : " + data.token + "<BR> " + data.action + "</p>"
 			);
         }
     </script>
@@ -362,7 +362,7 @@
                 var result;
                 //result = accessContract.removeOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11');
                 // addAccessLog({id:result.id, access: result?"Access Revoked":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
-                addAccessLog({id:uuid(), action: "Access Revoked", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
+                addAccessLog({id:uuid(), action: "Access Revoked", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'},1);
             }, 22000);
         }
 
