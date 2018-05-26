@@ -46,53 +46,61 @@
             font-size: 25px;
             height: 25px;
         }
-		#blockchain-log .logs {
+
+        #blockchain-log .logs {
             padding: 5px;
-		    max-height:80%;
-		    height:80%;
-		    overflow: scroll;
-		}
-		.controls{
-		    position: absolute;
-		    top:0;
-		    left: 200px;
-		    z-index: 999;
-		}
-		.controls button{
+            max-height: 80%;
+            height: 80%;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .controls {
+            position: absolute;
+            top: 0;
+            left: 200px;
+            z-index: 999;
+        }
+
+        .controls button {
             margin: 10px;
             padding: 7px;
         }
-		button.start{
-		    color: green;
-		}
-		button.pause{
-		    color: orange;
-		}
-		button.reset{
-		    color: darkred;
-		}
+
+        button.start {
+            color: green;
+        }
+
+        button.pause {
+            color: orange;
+        }
+
+        button.reset {
+            color: darkred;
+        }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=geometry&amp;key=AIzaSyCllNB49Wtg3V9KnNKBf-Xi0Ka9uXGwJmc"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 
-	<script>
+    <script>
         function addTransactionLog(data) {
             $('#access .logs').prepend(
-			    "<p>Transaction " + data.id + " Cost : " + data.coins + " coins" + "</p>"
-			);
+                "<p>Transaction " + data.id + " Cost : " + data.coins + " coins" + "</p>"
+            );
         }
+
         function addSensorsLog(data) {
             $('#sensor .logs').prepend(
-			    "<p>Transaction " + data.id + " Speed : " + data.speed + " km/h " + "GPS : " + data.gps + "</p>"
-			);
+                "<p>Transaction " + data.id + " Speed : " + data.speed + " km/h " + "GPS : " + data.gps + "</p>"
+            );
         }
+
         function addAccessLog(data) {
             $('#payment .logs').prepend(
-			    "<p >Transaction " + data.id +" Token : " + data.token + " " + data.action + " + "</p>"
-			);
+                "<p>Transaction " + data.id + " Token : " + data.token + " " + data.action + "</p>"
+            );
         }
-    </script>
-    <script>
+
         function getDeg(lat1, lon1, lat2, lon2) {
             var lat1 = lat1 * Math.PI / 180;
             var lat2 = lat2 * Math.PI / 180;
@@ -106,7 +114,9 @@
 
             return (((brng * 180 / Math.PI) + 360) % 360);
         }
+
         var SIZE = 60;
+
         function initialize() {
             var map = new google.maps.Map(document.getElementById("map"), {
                 center: {lat: 51.5087531, lng: -0.1281153},
@@ -168,13 +178,13 @@
                     // The origin for this image is (0, 0).
                     // origin: new google.maps.Point(0, 0),
                     // The anchor for this image is the base of the flagpole at (0, 32).
-                    anchor: new google.maps.Point(SIZE/2, SIZE/2)
+                    anchor: new google.maps.Point(SIZE / 2, SIZE / 2)
                 }
             });
 
             for (i = 0; i < pathCoords.length; i++) {
                 setTimeout(function (coords) {
-                    console.info(222,coords.lat(),coords.lng())
+                    console.info(222, coords.lat(), coords.lng())
                     var $img = $('div>img[src="' + ICON + '"]:visible');
                     // console.info($img[0])
                     if (prevP) {
@@ -218,26 +228,26 @@
     </script>
 </head>
 <body>
-	<div class="controls">
-        <button class="start" onclick="addTransactionLog({id: 123 })">Start</button>
-        <button class="pause" onclick="addSensorsLog({id: 123 })">Pause</button>
-        <button class="reset" onclick="addAccessLog({id: 123 })">Reset</button>
-    </div>
+<div class="controls">
+    <button class="start" onclick="addTransactionLog({id: 123 })">Start</button>
+    <button class="pause" onclick="addSensorsLog({id: 123 })">Pause</button>
+    <button class="reset" onclick="addAccessLog({id: 123 })">Reset</button>
+</div>
 
-	<div id="map" class="column left"></div>
-	<div id="blockchain-log" class="column right">
-        <div id="access">
-            <div class="header">Blockchain Access Transactions</div>
-            <div class="logs"></div>
-        </div>
-        <div id="sensor">
-            <div class="header">Blockchain Sensors Logging</div>
-            <div class="logs"></div>
-        </div>
-        <div id="payment">
-            <div class="header">Blockchain Payments</div>
-            <div class="logs"></div>
-        </div>
+<div id="map" class="column left"></div>
+<div id="blockchain-log" class="column right">
+    <div id="access">
+        <div class="header">Blockchain Access Transactions</div>
+        <div class="logs"></div>
     </div>
+    <div id="sensor">
+        <div class="header">Blockchain Sensors Logging</div>
+        <div class="logs"></div>
+    </div>
+    <div id="payment">
+        <div class="header">Blockchain Payments</div>
+        <div class="logs"></div>
+    </div>
+</div>
 </body>
 </html>
