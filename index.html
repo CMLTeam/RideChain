@@ -133,24 +133,24 @@
             "payable": false,
             "type": "function"
         },
-            {
-                "constant": false,
-                "inputs": [
-                    {
-                        "name": "operator",
-                        "type": "address"
-                    }
-                ],
-                "name": "removeOperator",
-                "outputs": [
-                    {
-                        "name": "success",
-                        "type": "bool"
-                    }
-                ],
-                "payable": false,
-                "type": "function"
-            }];
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "operator",
+                    "type": "address"
+                }
+            ],
+            "name": "removeOperator",
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "type": "function"
+        }];
         const sensors_abi = [{
             "constant": false,
             "inputs": [
@@ -169,15 +169,39 @@
             "payable": false,
             "type": "function"
         }];
-        const payment_abi = [{
+        const geocharge_abi = [{
             "constant": false,
             "inputs": [
                 {
-                    "name": "data",
+                    "name": "lat",
+                    "type": "uint256"
+                },
+                {
+                    "name": "lan",
                     "type": "uint256"
                 }
             ],
-            "name": "pay",
+            "name": "passedThrough",
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "bool"
+                }
+            ],
+            "type": "function"
+        },{
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "lat",
+                    "type": "uint256"
+                },
+                {
+                    "name": "lan",
+                    "type": "uint256"
+                }
+            ],
+            "name": "isPassingCheckpoint",
             "outputs": [
                 {
                     "name": "success",
@@ -187,8 +211,7 @@
             "type": "function"
         }];
         const access_address = '0x10B3f0C8a7188f027c919D378889d5a21cF94Ba6';
-        const payment_address = '0x7011f3edc7fa43c81440f9f43a6458174113b162';
-        const sensors_address = '0xc2D082F35b6c1688fFcc17C3Bae0792c59A9CD11';
+        const geocharge_address = '0x7011f3edc7fa43c81440f9f43a6458174113b162';
         window.addEventListener('load', function () {
             if (typeof web3 !== 'undefined') {
                 const eth = new Eth(web3.currentProvider);
@@ -197,11 +220,8 @@
                 const AccessContract = contract(access_abi);
                 const accessContract = AccessContract.at(access_address);
 
-                const PaymentContract = contract(access_abi);
-                const paymentContract = PaymentContract.at(payment_address);
-
-                const SensorsContract = contract(access_abi);
-                const sensorsContract = SensorsContract.at(sensors_address);
+                const GeoCharge = contract(geocharge_abi);
+                const geoCharge = GeoCharge.at(geocharge_address);
             }
         });
 
@@ -333,7 +353,7 @@
             });
 
             var result;
-            //result = accessContract.addOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11',1);
+            //result = accessContract.addOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11');
             // addAccessLog({id:result.id, access: result?"Access Granted":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
             addAccessLog({
                 id: uuid(),
@@ -354,7 +374,7 @@
                         // addSensorsLog({id:result.id, gps: gps});
                         var gps = coords.lat().toString().substr(0, 7) + ", " + coords.lng().toString().substr(0, 7);
                         addSensorsLog({id: uuid(), gps: gps});
-                        //result =paymentContract.pay(2);
+                        //result =geoCharge.passedThrough(coords.lat(),coords.lng());
                         // if (result){
                         //     addTransactionLog({id:result.id, coins:result.coins});
                         // }
