@@ -315,7 +315,7 @@
             var result;
             //result = accessContract.addOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11',1);
             // addAccessLog({id:result.id, access: result?"Access Granted":"Request Rejected", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
-            addAccessLog({id:uuid(), action: "Access Granted", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'});
+            addAccessLog({id:uuid(), action: "Access Granted", token:'0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'},0);
             for (var i = 0; i < pathCoords.length; i++) {
                 setTimeout(function (i) {
                     var coords = pathCoords[i];
