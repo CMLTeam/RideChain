@@ -232,9 +232,13 @@
         // var start = new google.maps.LatLng(44.142829, 3.017506);
         // var end = new google.maps.LatLng(44.062912, 3.026836);
         var end = new google.maps.LatLng(44.06586, 3.02531);
+        var startMan2 = new google.maps.LatLng(44.06286, 3.01831);
         var man1Marker, man2Marker;
 
         function showText(latLong, text) {
+            // latLong = new google.maps.LatLng(44.134150, 3.025150);
+            // latLong = new google.maps.LatLng(latLong.lat()-0.002, 3.035150);
+            latLong = new google.maps.LatLng(latLong.lat()-0.002,latLong.lng());
             var marker = new google.maps.Marker({
                 position: latLong,
                 draggable: true,
@@ -247,9 +251,9 @@
                     null, null, new google.maps.Point(0, 45))
             });
 
-            return function () {
+            setTimeout(function () {
                 marker.setMap(null);
-            }
+            }, 5000)
         }
 
         function initialize() {
@@ -261,6 +265,7 @@
                 mapTypeId: google.maps.MapTypeId.ROADMAP
                 // mapTypeId: google.maps.MapTypeId.TERRAIN
             });
+            // showText(start, "STEP 1: Access Granted");
 
             // var marker1=new google.maps.Marker({map:map, icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
             var payMarker = new google.maps.Marker({
@@ -340,12 +345,16 @@
                 action: "Access Granted",
                 token: '0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'
             }, 0);
-            // showText(start, "STEP 1: Access Granted");
+            showText(start, "STEP 1: Access Granted");
             setTimeout(function () {
                 man1Marker.setMap(null);
                 for (var i = 0; i < pathCoords.length; i++) {
                     setTimeout(function (i) {
                         var coords = pathCoords[i];
+                        if (i === 27)
+                            showText(coords, "STEP 2: Collect Telemetry");
+                        if (i === 49)
+                            showText(coords, "STEP 3: Payment Transaction");
                         console.info(222, coords.lat(), coords.lng())
                         var $img = $('div>img[src="' + CAR_ICON + '"]:visible');
                         // console.info($img[0])
@@ -379,7 +388,6 @@
                                     scaledSize: new google.maps.Size(SIZE, SIZE)
                                 }
                             });
-                            var startMan2 = new google.maps.LatLng(44.06286, 3.03231);
                             man2Marker.setPosition(startMan2);
                             var result;
                             //result = accessContract.removeOperator('0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11');
@@ -389,6 +397,7 @@
                                 action: "Access Revoked",
                                 token: '0xc2d082f35b6c1688ffcc17c3bae0792c59a9cd11'
                             }, 1);
+                            showText(coords, "STEP 4: Access Token Revoked");
                         }
                     }, 285 * i, i);
                 }
